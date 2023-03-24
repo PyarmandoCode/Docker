@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: album-k8s-app
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: album-k8s-app
+  template: # template for each pod in this deployment
+    metadata:
+      labels:
+        app: album-k8s-app
+    spec:
+      containers:
+        - name: album-app-container
+          image: armandoruiz/app_albunes_list
+          imagePullPolicy: IfNotPresent # Check local first
+          ports:
+            - containerPort: 6000
+              protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: album-app-service
+spec:
+  type: ClusterIP # this is the default
+  selector:
+    app: album-k8s-app # find pods with this label (line 14)
+  ports:
+    - port: 90
+      protocol: TCP
+      targetPort: 6000 # same as containerPort
