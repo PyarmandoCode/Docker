@@ -1,0 +1,7 @@
+#Base Image
+FROM mysql
+
+#Add Alguos Scripts
+
+COPY ./scripts/ /docker-entrypoint-initdb.d/
+
